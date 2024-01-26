@@ -14,18 +14,18 @@ meetingRooms.use("/:meeting_room_id/bookings", bookingsController)
 meetingRooms.get("/", async (req, res) => {
   const allMeetingRooms = await getAllMeetingRooms();
 
-  if (messages[0]) {
+  if (allMeetingRooms[0]) {
     //no query, show everything
     res
       .status(200)
-      .json({ success: true, data: { payload: [...allMeetingRooms] } });
+      .json({ success: true, data: { payload: allMeetingRooms } });
   } else {
     //do something for queries
     res
       .status(400)
       .json({
         success: false,
-        data: { error: "Server Error - we didn't do it!" },
+        data: { error: "Server Error - Something went wrong fetching data!" },
       });
   }
 });
@@ -43,7 +43,7 @@ meetingRooms.get("/:id", async (req, res) => {
       .status(404)
       .json({
         success: false,
-        data: { error: "Server Error - we didn't do it!" },
+        data: { error: "Server Error - Meeting room not found!" },
       });
   }
 });
@@ -51,9 +51,10 @@ meetingRooms.get("/:id", async (req, res) => {
 /** post */
 meetingRooms.post("/", async (req, res) => {
   try {
-    const oneMeetingRoom = await createMeetingRoom(req.body);
+    const createdMeetingRoom = await createMeetingRoom(req.body);
+    res.status(201).json(createdMeetingRoom)
   } catch (error) {
-    res.status(400).json({ error: "something missing in your header" });
+    res.status(400).json({ error: "Server Error - Failed to create meeting room" });
   }
 });
 
@@ -61,7 +62,7 @@ meetingRooms.post("/", async (req, res) => {
 meetingRooms.get("*", (req, res) => {
   res
     .status(404)
-    .send("with incorrect id - sets status to 404 and returns error key");
+    .send("Incorrect route - sets status to 404 and returns error key");
 });
 
 module.exports = meetingRooms;
