@@ -5,46 +5,51 @@ const {
   createMeetingRoom,
 } = require("../queries/meetingRooms");
 
-const bookingsController = require("./bookingsController.js")
+const bookingsController = require("./bookingsController.js");
 const meetingRooms = express.Router();
 
-meetingRooms.use("/:meeting_room_id/bookings", bookingsController)
+meetingRooms.use("/:meeting_room_id/bookings", bookingsController);
 
 /** get */
 meetingRooms.get("/", async (req, res) => {
-  const allMeetingRooms = await getAllMeetingRooms();
+  try {
+    const allMeetingRooms = await getAllMeetingRooms();
 
-  if (allMeetingRooms[0]) {
-    //no query, show everything
-    res
-      .status(200)
-      .json({ success: true, data: { payload: allMeetingRooms } });
-  } else {
-    //do something for queries
-    res
-      .status(400)
-      .json({
+    if (allMeetingRooms[0]) {
+      res.status(200).json({ success: true, data: { payload: allMeetingRooms } });
+    } else {
+      res.status(404).json({
         success: false,
-        data: { error: "Server Error - Something went wrong fetching data!" },
+        data: { error: "No meeting rooms found!" },
       });
+    }
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      data: { error: "Server Error - Something went wrong fetching data!" },
+    });
   }
 });
 
 meetingRooms.get("/:id", async (req, res) => {
   const { id } = req.params;
-  const oneMeetingRoom = await getOneMeetingRoom(id);
 
-  if (oneMeetingRoom) {
-    //no query, show everything
-    res.status(200).json({ success: true, data: { payload: oneMeetingRoom } });
-  } else {
-    //do something for queries
-    res
-      .status(404)
-      .json({
+  try {
+    const oneMeetingRoom = await getOneMeetingRoom(id);
+
+    if (oneMeetingRoom) {
+      res.status(200).json({ success: true, data: { payload: oneMeetingRoom } });
+    } else {
+      res.status(404).json({
         success: false,
-        data: { error: "Server Error - Meeting room not found!" },
+        data: { error: "Meeting room not found!" },
       });
+    }
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      data: { error: "Server Error - Something went wrong fetching data!" },
+    });
   }
 });
 
@@ -52,9 +57,12 @@ meetingRooms.get("/:id", async (req, res) => {
 meetingRooms.post("/", async (req, res) => {
   try {
     const createdMeetingRoom = await createMeetingRoom(req.body);
-    res.status(201).json(createdMeetingRoom)
+    res.status(201).json({ success: true, data: { payload: createdMeetingRoom } });
   } catch (error) {
-    res.status(400).json({ error: "Server Error - Failed to create meeting room!" });
+    res.status(400).json({
+      success: false,
+      data: { error: "Failed to create meeting room!" },
+    });
   }
 });
 
