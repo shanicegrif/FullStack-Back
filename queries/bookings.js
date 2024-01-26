@@ -4,7 +4,7 @@ const db = require("../db/dbConfig.js");
 CREATE TABLE bookings (
     booking_id SERIAL PRIMARY KEY,
     meetingName VARCHAR(255) UNIQUE NOT NULL,
-    meetingRoomId INTEGER REFERENCES meetingRooms (room_id) ON DELETE CASCADE,
+    meeting_room_id INTEGER REFERENCES meetingRooms (room_id) ON DELETE CASCADE,
     startDate TIMESTAMP NOT NULL,
     endDate TIMESTAMP NOT NULL,
     attendees TEXT
@@ -28,7 +28,7 @@ const getOneBooking = async (id) => {
     };
 };
 
-const deleteOneBooking = async(id) => {
+const deleteOneBooking = async (id) => {
     try {
         const booking = await db.one(`DELETE FROM bookings WHERE room_id = ${id} RETURNING *`);
         return booking;
@@ -38,13 +38,13 @@ const deleteOneBooking = async(id) => {
 };
 
 const createBooking = async (item) => {
-    const { meeitngName, meetingRoomId, startDate, endDate, attendees } = item;
-    if(!meeitngName || !meetingRoomId || !startDate || !endDate){
+    const { meeitngName, meeting_room_id, startDate, endDate, attendees } = item;
+    if(!meeitngName || !meeting_room_id || !startDate || !endDate){
         return {error: "something is missing"};
     };
     try {
-        const booking = await db.one(`INSERT INTO bookings (meeitngName, meetingRoomId, startDate, endDate, attendees) 
-            VALUES ($1, $2, $3, $4, $5) RETURNING *`, [meeitngName, meetingRoomId, startDate, endDate, attendees]);
+        const booking = await db.one(`INSERT INTO bookings (meetingName, meeting_room_id, startDate, endDate, attendees) 
+            VALUES ($1, $2, $3, $4, $5) RETURNING *`, [meeitngName, meeting_room_id, startDate, endDate, attendees]);
         return booking;
     } catch(err){
         return err;

@@ -10,7 +10,7 @@ CREATE TABLE meetingRooms (
 */
 const getAllMeetingRooms = async () => {
     try {
-        const allMeetingRooms = await db.any("SELECT * FROM meetingRooms");
+        const allMeetingRooms = await db.any("SELECT * FROM meeting_rooms");
         return allMeetingRooms;
     } catch(err) {
         return err;
@@ -19,7 +19,7 @@ const getAllMeetingRooms = async () => {
 
 const getOneMeetingRoom = async (id) => {
     try{
-        const meetingRoom = await db.one(`SELECT * FROM meetingRooms WHERE room_id = ${id}`);
+        const meetingRoom = await db.one(`SELECT * FROM meeting_rooms WHERE room_id = ${id}`);
         return meetingRoom;
     } catch(err) {
         return err;
@@ -32,7 +32,7 @@ const createMeetingRoom = async (item) => {
         return {error: "something is missing"};
     };
     try {
-        const meetingRoom = await db.one(`INSERT INTO meetingRooms (name, capacity, floor) 
+        const meetingRoom = await db.one(`INSERT INTO meeting_rooms (name, capacity, floor) 
             VALUES ($1, $2, $3) RETURNING *`, [name, capacity, floor]);
         return meetingRoom;
     } catch(err){
