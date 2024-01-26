@@ -54,7 +54,7 @@ meetingRooms.post("/", async (req, res) => {
     const createdMeetingRoom = await createMeetingRoom(req.body);
     res.status(201).json(createdMeetingRoom)
   } catch (error) {
-    res.status(400).json({ error: "Server Error - Failed to create meeting room" });
+    res.status(400).json({ error: "Server Error - Failed to create meeting room!" });
   }
 });
 
