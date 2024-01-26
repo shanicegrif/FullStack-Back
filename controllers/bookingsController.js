@@ -76,7 +76,7 @@ bookings.delete("/:booking_id", async (req, res) => {
 bookings.get("*", (req, res) => {
   res
     .status(404)
-    .send("with incorrect id - sets status to 404 and returns error key");
+    .send("Incorrect route - sets status to 404 and returns error key");
 });
 
 module.exports = bookings;
