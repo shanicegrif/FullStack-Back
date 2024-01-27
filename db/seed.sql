@@ -9,7 +9,7 @@ INSERT INTO meeting_rooms (name, capacity, floor) VALUES
     ('Room E', 15, 5);
 
 /*sample data into the bookings table*/
-INSERT INTO bookings (meeting_name, meeting_room_id, start_date, end_date, attendees) VALUES
+INSERT INTO bookings (meeting_name, meeting_room_id, startDate, endDate, attendees) VALUES
     ('Meeting 1', 1, '2022-03-23T10:00:00.000Z', '2022-03-23T11:30:00.000Z', 'sam@email.com, amy@email.com'),
     ('Meeting 2', 2, '2022-03-23T14:00:00.000Z', '2022-03-23T15:30:00.000Z', 'dani@email.com, remy@email.com'),
     ('Meeting 3', 3, '2022-03-24T09:30:00.000Z', '2022-03-24T11:00:00.000Z', 'lucy@email.com'),

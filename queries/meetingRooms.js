@@ -19,7 +19,7 @@ const getAllMeetingRooms = async () => {
 
 const getOneMeetingRoom = async (id) => {
     try{
-        const meetingRoom = await db.one(`SELECT * FROM meeting_rooms WHERE room_id = ${id}`);
+        const meetingRoom = await db.one("SELECT * FROM meeting_rooms WHERE room_id = $1", [id]);
         return meetingRoom;
     } catch(err) {
         return err;
@@ -29,11 +29,10 @@ const getOneMeetingRoom = async (id) => {
 const createMeetingRoom = async (item) => {
     const { name, capacity, floor } = item;
     if(!name || !capacity || !floor){
-        return {error: "something is missing"};
+        return {error: "Required fields are missing"};
     };
     try {
-        const meetingRoom = await db.one(`INSERT INTO meeting_rooms (name, capacity, floor) 
-            VALUES ($1, $2, $3) RETURNING *`, [name, capacity, floor]);
+        const meetingRoom = await db.one("INSERT INTO meeting_rooms (name, capacity, floor) VALUES ($1, $2, $3) RETURNING *", [name, capacity, floor]);
         return meetingRoom;
     } catch(err){
         return err;
