@@ -5,10 +5,11 @@ const {
   createMeetingRoom,
 } = require("../queries/meetingRooms");
 
-const bookingsController = require("./bookingsController.js");
+//const bookingsController = require("./bookingsController.js");
+const {getBookingsByRoomId} = require("../queries/bookings");
 const meetingRooms = express.Router();
 
-meetingRooms.use("/:meeting_room_id/bookings", bookingsController);
+//meetingRooms.use("/:meeting_room_id/bookings", bookingsController);
 
 /** get */
 meetingRooms.get("/", async (req, res) => {
@@ -52,6 +53,24 @@ meetingRooms.get("/:id", async (req, res) => {
     });
   }
 });
+
+meetingRooms.get("/:id/bookings", async (req, res) => {
+    const {id} = req.params;
+    const allBookings = await getBookingsByRoomId(id);
+
+    if (allBookings) {
+        //no query, show everything
+        res.status(200).json({ success: true, data: { payload: [...allBookings] } });
+      } else {
+        //do something for queries
+        res
+          .status(404)
+          .json({
+            success: false,
+            data: { error: "Server Error - we didn't do it!" },
+          });
+      }
+})
 
 /** post */
 meetingRooms.post("/", async (req, res) => {
