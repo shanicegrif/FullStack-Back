@@ -5,6 +5,9 @@ const {
   createMeetingRoom,
 } = require("../queries/meetingRooms");
 
+const {checkName,
+  checkCapacityAndFloor} = require("../validation/checks.js")
+
 const {getBookingsByRoomId} = require("../queries/bookings");
 const meetingRooms = express.Router();
 
@@ -70,7 +73,8 @@ meetingRooms.get("/:id/bookings", async (req, res) => {
 })
 
 /** post */
-meetingRooms.post("/", async (req, res) => {
+meetingRooms.post("/", checkName,
+checkCapacityAndFloor, async (req, res) => {
   try {
     const createdMeetingRoom = await createMeetingRoom(req.body);
     res.status(201).json({ success: true, data: { payload: createdMeetingRoom } });
