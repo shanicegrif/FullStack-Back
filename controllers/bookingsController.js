@@ -11,7 +11,7 @@ const bookings = express.Router();
 /** get */
 bookings.get("/", async (req, res) => {
   const allBookings = await getAllBookings();
-    console.log(allBookings)
+    
   if (allBookings) {
     //no query, show everything
     res
@@ -59,6 +59,7 @@ bookings.post("/", async (req, res) => {
 bookings.delete("/:booking_id", async (req, res) => {
   const { booking_id } = req.params;
   const booking = await deleteOneBooking(booking_id);
+  
   if (booking) {
     res.status(200).json(booking);
   } else {

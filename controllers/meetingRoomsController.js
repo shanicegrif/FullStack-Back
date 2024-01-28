@@ -5,11 +5,8 @@ const {
   createMeetingRoom,
 } = require("../queries/meetingRooms");
 
-//const bookingsController = require("./bookingsController.js");
 const {getBookingsByRoomId} = require("../queries/bookings");
 const meetingRooms = express.Router();
-
-//meetingRooms.use("/:meeting_room_id/bookings", bookingsController);
 
 /** get */
 meetingRooms.get("/", async (req, res) => {
