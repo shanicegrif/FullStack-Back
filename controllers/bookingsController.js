@@ -23,14 +23,14 @@ bookings.get("/", async (req, res) => {
       .status(400)
       .json({
         success: false,
-        data: { error: "Server Error - we didn't do it!" },
+        data: { error: "Server Error - Something went wrong w/ fetching data!" },
       });
   }
 });
 
-bookings.get("/:id", async (req, res) => {
-  const { id } = req.params;
-  const oneBooking = await getOneBooking(id);
+bookings.get("/:booking_id", async (req, res) => {
+  const { booking_id } = req.params;
+  const oneBooking = await getOneBooking(booking_id);
 
   if (oneBooking) {
     //no query, show everything
@@ -41,7 +41,7 @@ bookings.get("/:id", async (req, res) => {
       .status(404)
       .json({
         success: false,
-        data: { error: "Server Error - we didn't do it!" },
+        data: { error: "Server Error - Booking not found!" },
       });
   }
 });
@@ -51,18 +51,18 @@ bookings.post("/", async (req, res) => {
   try {
     const booking = await createBooking(req.body);
   } catch (error) {
-    res.status(400).json({ error: "something missing in your header" });
+    res.status(400).json({ error: "Failed to create booking!" });
   }
 });
 
 /** delete */
-bookings.delete("/:id", async (req, res) => {
-  const { id } = req.params;
-  const booking = await deleteOneBooking(id);
+bookings.delete("/:booking_id", async (req, res) => {
+  const { booking_id } = req.params;
+  const booking = await deleteOneBooking(booking_id);
   if (booking) {
     res.status(200).json(booking);
   } else {
-    res.status(404).json("wrong");
+    res.status(404).json({error : "No booking found at that id."});
   }
 });
 
