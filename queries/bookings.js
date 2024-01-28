@@ -28,6 +28,15 @@ const getOneBooking = async (id) => {
     };
 };
 
+const getBookingsByRoomId = async (id) => {
+    try {
+        const allBookings = await db.any(`SELECT * FROM bookings WHERE meeting_room_id = ${id}`);
+        return allBookings;
+    } catch(err) {
+        return err;
+    };
+};
+
 const deleteOneBooking = async (id) => {
     try {
         const booking = await db.one(`DELETE FROM bookings WHERE room_id = ${id} RETURNING *`);
@@ -56,4 +65,5 @@ module.exports = {
     getOneBooking,
     deleteOneBooking,
     createBooking,
+    getBookingsByRoomId,
 }

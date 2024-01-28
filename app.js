@@ -1,6 +1,8 @@
 const express = require("express");
 const cors = require("cors");
 const meetingRooms = require('./controllers/meetingRoomsController.js')
+const bookingsController = require("./controllers/bookingsController.js");
+
 const app = express();
 
 app.use(cors());
@@ -12,6 +14,7 @@ app.get("/", (request, response) => {
 });
 
 app.use("/meetingRooms", meetingRooms);
+app.use("/bookings", bookingsController);
 
 // 404 Page not found
 app.get("*", (req, res) => {
